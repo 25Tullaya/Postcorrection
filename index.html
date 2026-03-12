@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>ระบบแก้คำผิด</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+<div class="logo">LOGO</div>
+</header>
+
+<div class="center-box">
+
+<p class="drag-text">ลากไฟล์และวางที่นี่</p>
+
+<input type="file" id="fileInput" hidden>
+
+<button class="upload-btn" onclick="uploadFile()">อัปโหลด</button>
+
+<div class="check-area">
+<label><input type="checkbox"> อัปโหลดเทรน</label>
+<label><input type="checkbox"> อัปโหลดเพื่อตรวจ</label>
+</div>
+
+</div>
+
+<button class="main-btn" onclick="goToFile()">
+ดำเนินการตรวจสอบ
+</button>
+
+<script>
+function goToFile(){
+    window.location.href = "train_test.html";
+}
+</script>
+
+<script>
+
+function uploadFile(){
+    document.getElementById("fileInput").click();
+}
+
+document.getElementById("fileInput").addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(file){
+        alert("อัปโหลดไฟล์: " + file.name);
+    }
+
+});
+
+</script>
+
+</body>
+</html>
