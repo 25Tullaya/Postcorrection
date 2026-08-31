@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ระบบแก้ไขคำผิด</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        LOGO
+    </div>
+
+
+    <button
+        class="home-btn"
+        onclick="goHome()"
+    >
+
+        หน้าแรก
+
+    </button>
+
+</header>
+
+
+
+<h2 class="title">
+
+    ระบบแก้ไขคำผิด
+
+</h2>
+
+
+<p class="subtitle">
+
+    อัปโหลดไฟล์ข้อมูลเพื่อฝึกและทดสอบโมเดลการแก้ไขคำผิดอัตโนมัติ
+
+</p>
+
+
+
+<div class="flex-box">
+
+
+
+<!-- ================================= -->
+<!-- TRAIN -->
+<!-- ================================= -->
+
+<div class="model-box">
+
+    <h3>
+        Train
+    </h3>
+
+
+    <p>
+        Training Data
+    </p>
+
+
+    <input
+        type="text"
+        id="trainFile"
+        readonly
+    >
+
+
+    <button
+        class="model-btn"
+        onclick="trainModel()"
+    >
+
+        train model
+
+    </button>
+
+
+    <div class="progress-container">
+
+        <div
+            id="trainProgress"
+            class="progress-bar"
+        ></div>
+
+    </div>
+
+
+    <p id="trainStatus">
+
+        ยังไม่ได้ Train
+
+    </p>
+
+</div>
+
+
+
+<!-- ================================= -->
+<!-- TEST -->
+<!-- ================================= -->
+
+<div class="model-box">
+
+    <h3>
+        Test
+    </h3>
+
+
+    <p>
+        Test Data
+    </p>
+
+
+    <input
+        type="text"
+        id="testFile"
+        readonly
+    >
+
+
+    <button
+        class="model-btn"
+        onclick="testModel()"
+    >
+
+        test model
+
+    </button>
+
+
+    <div class="score">
+
+        <p id="wer">
+            WER : -
+        </p>
+
+
+        <p id="cer">
+            CER : -
+        </p>
+
+
+        <p id="bleu">
+            BLEU : -
+        </p>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+// =====================================
+// Backend URL
+// =====================================
+
+const API_URL =
+    "http://127.0.0.1:8000";
+
+
+
+// =====================================
+// โหลดข้อมูลจากหน้า index
+// =====================================
+
+window.onload = function () {
+
+
+    const fileName =
+        localStorage.getItem(
+            "fileName"
+        );
+
+
+    const trainSelected =
+        localStorage.getItem(
+            "trainSelected"
+        );
+
+
+    const testSelected =
+        localStorage.getItem(
+            "testSelected"
+        );
+
+
+
+    if (
+        trainSelected === "true"
+    ) {
+
+        document
+            .getElementById(
+                "trainFile"
+            )
+            .value =
+            fileName;
+
+    }
+
+
+
+    if (
+        testSelected === "true"
+    ) {
+
+        document
+            .getElementById(
+                "testFile"
+            )
+            .value =
+            fileName;
+
+    }
+
+};
+
+
+
+// =====================================
+// TRAIN
+// =====================================
+
+async function trainModel() {
+
+
+    const file =
+        document
+            .getElementById(
+                "trainFile"
+            )
+            .value;
+
+
+    if (!file) {
+
+        alert(
+            "ไม่พบ Training Data"
+        );
+
+        return;
+
+    }
+
+
+
+    const progress =
+        document
+            .getElementById(
+                "trainProgress"
+            );
+
+
+    const status =
+        document
+            .getElementById(
+                "trainStatus"
+            );
+
+
+
+    try {
+
+
+        status.innerText =
+            "กำลังส่งข้อมูลไป Backend...";
+
+
+        progress.style.width =
+            "30%";
+
+
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/api/training/train?filename=" +
+                encodeURIComponent(file),
+
+                {
+                    method: "POST"
+                }
+
+            );
+
+
+
+        const data =
+            await response.json();
+
+
+
+        if (!response.ok) {
+
+            alert(
+                data.detail ||
+                "Train ไม่สำเร็จ"
+            );
+
+
+            progress.style.width =
+                "0%";
+
+
+            status.innerText =
+                "Train ไม่สำเร็จ";
+
+
+            return;
+
+        }
+
+
+
+        progress.style.width =
+            "100%";
+
+
+        status.innerText =
+            "Train สำเร็จ";
+
+
+
+        localStorage.setItem(
+            "modelTrained",
+            "true"
+        );
+
+
+
+        alert(
+            "Train Model สำเร็จ"
+        );
+
+
+
+        console.log(
+            "Training Result:",
+            data
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "ไม่สามารถเชื่อมต่อ Backend ได้"
+        );
+
+
+        status.innerText =
+            "เชื่อมต่อ Backend ไม่สำเร็จ";
+
+    }
+
+}
+
+
+
+// =====================================
+// TEST
+// =====================================
+
+async function testModel() {
+
+
+    const file =
+        document
+            .getElementById(
+                "testFile"
+            )
+            .value;
+
+
+
+    if (!file) {
+
+        alert(
+            "ไม่พบ Test Data"
+        );
+
+        return;
+
+    }
+
+
+
+    const trained =
+        localStorage.getItem(
+            "modelTrained"
+        );
+
+
+
+    if (
+        trained !== "true"
+    ) {
+
+        alert(
+            "กรุณา Train Model ก่อน"
+        );
+
+        return;
+
+    }
+
+
+
+    try {
+
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/api/testing/test?filename=" +
+                encodeURIComponent(file),
+
+                {
+                    method: "POST"
+                }
+
+            );
+
+
+
+        const data =
+            await response.json();
+
+
+
+        if (!response.ok) {
+
+            alert(
+                data.detail ||
+                "Test ไม่สำเร็จ"
+            );
+
+            return;
+
+        }
+
+
+
+        // =================================
+        // แสดงผลคะแนน
+        // =================================
+
+        document
+            .getElementById(
+                "wer"
+            )
+            .innerText =
+            "WER : " +
+            data.metrics.wer;
+
+
+
+        document
+            .getElementById(
+                "cer"
+            )
+            .innerText =
+            "CER : " +
+            data.metrics.cer;
+
+
+
+        document
+            .getElementById(
+                "bleu"
+            )
+            .innerText =
+            "BLEU : " +
+            data.metrics.bleu;
+
+
+
+        // =================================
+        // เก็บผล
+        // =================================
+
+        localStorage.setItem(
+            "testCompleted",
+            "true"
+        );
+
+
+        localStorage.setItem(
+            "wer",
+            data.metrics.wer
+        );
+
+
+        localStorage.setItem(
+            "cer",
+            data.metrics.cer
+        );
+
+
+        localStorage.setItem(
+            "bleu",
+            data.metrics.bleu
+        );
+
+
+
+        console.log(
+            "Testing Result:",
+            data
+        );
+
+
+
+        // ไปหน้า Result
+
+        window.location.href =
+            "result.html";
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "ไม่สามารถเชื่อมต่อ Backend ได้"
+        );
+
+    }
+
+}
+
+
+
+// =====================================
+// HOME
+// =====================================
+
+function goHome() {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

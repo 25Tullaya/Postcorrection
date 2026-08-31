@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>แก้ไขข้อความ</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        LOGO
+    </div>
+
+
+    <button
+        class="home-btn"
+        onclick="goHome()"
+    >
+
+        หน้าแรก
+
+    </button>
+
+</header>
+
+
+
+<h2 class="title">
+
+    แก้ไขข้อความ
+
+</h2>
+
+
+<p class="subtitle">
+
+    เปรียบเทียบข้อความก่อนและหลังการแก้ไข
+
+</p>
+
+
+
+<div class="correction-box">
+
+
+
+    <!-- ================================= -->
+    <!-- HEADER -->
+    <!-- ================================= -->
+
+    <div class="correction-header">
+
+        <div>
+            ข้อความก่อนแก้ไข
+        </div>
+
+
+        <div>
+            ข้อความหลังแก้ไข
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- ROW 1 -->
+    <!-- ================================= -->
+
+    <div class="correction-row">
+
+        <div class="before">
+            โบกเวียย
+        </div>
+
+
+        <div class="after">
+            กำลังตรวจสอบ...
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- ROW 2 -->
+    <!-- ================================= -->
+
+    <div class="correction-row">
+
+        <div class="before">
+            เทคดาว
+        </div>
+
+
+        <div class="after">
+            กำลังตรวจสอบ...
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- ROW 3 -->
+    <!-- ================================= -->
+
+    <div class="correction-row">
+
+        <div class="before">
+            อธรทร
+        </div>
+
+
+        <div class="after">
+            กำลังตรวจสอบ...
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- ROW 4 -->
+    <!-- ================================= -->
+
+    <div class="correction-row">
+
+        <div class="before">
+            หมูกู๊กี้
+        </div>
+
+
+        <div class="after">
+            กำลังตรวจสอบ...
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- BUTTONS -->
+    <!-- ================================= -->
+
+    <div class="correction-actions">
+
+
+        <button
+            class="main-btn"
+            onclick="saveResult()"
+        >
+
+            บันทึกผล
+
+        </button>
+
+
+
+        <button
+            class="download-btn"
+            onclick="downloadResult()"
+        >
+
+            ดาวน์โหลด
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+// =====================================
+// Backend URL
+// =====================================
+
+const API_URL =
+    "http://127.0.0.1:8000";
+
+
+
+// =====================================
+// HOME
+// =====================================
+
+function goHome() {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+// =====================================
+// เรียก Backend เพื่อแก้ข้อความ
+// =====================================
+
+async function correctText(text) {
+
+
+    try {
+
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/api/correction/correct",
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+                            text: text
+                        })
+
+                }
+
+            );
+
+
+
+        const data =
+            await response.json();
+
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "แก้ไขข้อความไม่สำเร็จ"
+            );
+
+        }
+
+
+
+        return data;
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        return null;
+
+    }
+
+}
+
+
+
+// =====================================
+// ตรวจข้อความทั้งหมด
+// =====================================
+
+async function testCorrection() {
+
+
+    const beforeElements =
+        document.querySelectorAll(
+            ".before"
+        );
+
+
+    const afterElements =
+        document.querySelectorAll(
+            ".after"
+        );
+
+
+
+    for (
+        let i = 0;
+        i < beforeElements.length;
+        i++
+    ) {
+
+
+        const text =
+            beforeElements[i]
+                .innerText;
+
+
+
+        const result =
+            await correctText(
+                text
+            );
+
+
+
+        if (result) {
+
+
+            afterElements[i]
+                .innerText =
+                result.corrected_text;
+
+
+        }
+
+        else {
+
+
+            afterElements[i]
+                .innerText =
+                "ไม่สามารถตรวจสอบได้";
+
+
+        }
+
+    }
+
+}
+
+
+
+// =====================================
+// บันทึกผล
+// =====================================
+
+function saveResult() {
+
+
+    alert(
+
+        "ตอนนี้ระบบเชื่อมต่อ Backend แล้ว\n\n" +
+
+        "การบันทึกลง Database " +
+
+        "จะทำในขั้นตอนถัดไป"
+
+    );
+
+}
+
+
+
+// =====================================
+// ดาวน์โหลดผล
+// =====================================
+
+function downloadResult() {
+
+
+    const beforeElements =
+        document.querySelectorAll(
+            ".before"
+        );
+
+
+    const afterElements =
+        document.querySelectorAll(
+            ".after"
+        );
+
+
+
+    let text =
+        "ผลการแก้ไขข้อความ\n\n";
+
+
+
+    for (
+        let i = 0;
+        i < beforeElements.length;
+        i++
+    ) {
+
+
+        text +=
+
+            beforeElements[i]
+                .innerText +
+
+            " → " +
+
+            afterElements[i]
+                .innerText +
+
+            "\n";
+
+    }
+
+
+
+    const blob =
+        new Blob(
+
+            [text],
+
+            {
+                type:
+                    "text/plain;charset=utf-8"
+            }
+
+        );
+
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+
+    const a =
+        document.createElement(
+            "a"
+        );
+
+
+    a.href = url;
+
+
+    a.download =
+        "correction_result.txt";
+
+
+    a.click();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+window.onload = function () {
+
+    testCorrection();
+
+};
+
+
+</script>
+
+
+</body>
+
+</html>

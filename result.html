@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ผลการตรวจสอบ</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        LOGO
+    </div>
+
+
+    <button
+        class="home-btn"
+        onclick="goHome()"
+    >
+
+        หน้าแรก
+
+    </button>
+
+</header>
+
+
+
+<h2 class="title">
+
+    ผลการตรวจสอบ
+
+</h2>
+
+
+
+<div class="result-box">
+
+
+    <div class="result-header">
+
+        ข้อความที่ตรวจพบข้อผิดพลาด
+
+    </div>
+
+
+
+    <div class="result-list">
+
+
+        <div class="result-item">
+            โบกเวียย
+        </div>
+
+
+        <div class="result-item">
+            เทคดาว
+        </div>
+
+
+        <div class="result-item">
+            อธรทร
+        </div>
+
+
+        <div class="result-item">
+            หมูกู๊กี้
+        </div>
+
+
+        <div class="result-item">
+            ดรอสอบ
+        </div>
+
+
+        <div class="result-item">
+            เออตาน
+        </div>
+
+
+    </div>
+
+
+
+    <p
+        class="count"
+        id="errorCount"
+    >
+
+        จำนวนข้อความผิด 0 ข้อความ
+
+    </p>
+
+
+
+    <button
+        class="main-btn"
+        onclick="goToCorrection()"
+    >
+
+        ไปต่อเพื่อแก้ไข
+
+    </button>
+
+
+</div>
+
+
+
+<script>
+
+
+// =====================================
+// HOME
+// =====================================
+
+function goHome() {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+// =====================================
+// ไปหน้า Correction
+// =====================================
+
+function goToCorrection() {
+
+    window.location.href =
+        "correction.html";
+
+}
+
+
+
+// =====================================
+// แสดงจำนวนข้อความ
+// =====================================
+
+window.onload = function () {
+
+
+    const items =
+        document.querySelectorAll(
+            ".result-item"
+        );
+
+
+    document
+        .getElementById(
+            "errorCount"
+        )
+        .innerText =
+        "จำนวนข้อความผิด " +
+        items.length +
+        " ข้อความ";
+
+};
+
+
+</script>
+
+
+</body>
+
+</html>

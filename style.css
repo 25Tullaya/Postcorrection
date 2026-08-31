@@ -1,0 +1,429 @@
+body {
+
+    font-family: Arial, sans-serif;
+
+    background: #e8edf0;
+
+    text-align: center;
+
+    margin: 0;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    background: #636161;
+
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 30px;
+
+}
+
+
+.logo {
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   UPLOAD
+========================= */
+
+.center-box {
+
+    background: #dcdcdc;
+
+    width: 320px;
+
+    margin: 80px auto 30px;
+
+    padding: 40px;
+
+}
+
+
+.drag-text {
+
+    margin-bottom: 20px;
+
+}
+
+
+.upload-btn {
+
+    background: #111;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 25px;
+
+    cursor: pointer;
+
+}
+
+
+.upload-btn:hover,
+.main-btn:hover,
+.model-btn:hover,
+.home-btn:hover {
+
+    background: #333;
+
+}
+
+
+.file-name {
+
+    font-size: 14px;
+
+    margin-top: 15px;
+
+    word-break: break-all;
+
+}
+
+
+/* =========================
+   CHECKBOX
+========================= */
+
+.check-area {
+
+    margin-top: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    text-align: left;
+
+    align-items: center;
+
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.main-btn {
+
+    background: #111;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 35px;
+
+    cursor: pointer;
+
+}
+
+
+.home-btn {
+
+    background: #111;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 15px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.title {
+
+    margin-top: 40px;
+
+}
+
+
+.subtitle {
+
+    color: #444;
+
+    margin-bottom: 40px;
+
+}
+
+
+/* =========================
+   TRAIN / TEST
+========================= */
+
+.flex-box {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 120px;
+
+}
+
+
+.model-box {
+
+    text-align: left;
+
+    width: 250px;
+
+}
+
+
+.model-box input {
+
+    width: 100%;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+}
+
+
+.model-btn {
+
+    background: #111;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 20px;
+
+    margin-top: 10px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-container {
+
+    height: 5px;
+
+    width: 100%;
+
+    background: #ccc;
+
+    margin-top: 15px;
+
+}
+
+
+.progress-bar {
+
+    height: 100%;
+
+    width: 0%;
+
+    background: #4a6cf7;
+
+    transition: width 0.3s;
+
+}
+
+
+/* =========================
+   SCORE
+========================= */
+
+.score {
+
+    margin-top: 15px;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+.result-box {
+
+    width: 400px;
+
+    max-width: 90%;
+
+    margin: 40px auto;
+
+    background: #dcdcdc;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+}
+
+
+.result-header {
+
+    background: #bfbfbf;
+
+    padding: 12px;
+
+    margin-bottom: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.result-list {
+
+    background: #e5e5e5;
+
+}
+
+
+.result-item {
+
+    padding: 10px;
+
+    border-bottom: 1px solid #bbb;
+
+    text-align: left;
+
+}
+
+
+.count {
+
+    margin-top: 15px;
+
+}
+
+
+/* =========================
+   CORRECTION
+========================= */
+
+.correction-box {
+
+    width: 800px;
+
+    max-width: 90%;
+
+    margin: 40px auto;
+
+}
+
+
+.correction-header {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+}
+
+
+.correction-header div {
+
+    background: #bfbfbf;
+
+    padding: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.correction-row {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 5px;
+
+}
+
+
+.correction-row div {
+
+    padding: 12px;
+
+    text-align: left;
+
+}
+
+
+.before {
+
+    background: #eee;
+
+}
+
+
+.after {
+
+    background: #d9e8d9;
+
+}
+
+
+.correction-actions {
+
+    margin-top: 25px;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+}
+
+
+.download-btn {
+
+    background: #555;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 25px;
+
+    cursor: pointer;
+
+}

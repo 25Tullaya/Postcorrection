@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+pandas
+openpyxl
+torch
+transformers
+sentencepiece
+pythainlp
+scikit-learn

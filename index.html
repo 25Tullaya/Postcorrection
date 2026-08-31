@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ระบบแก้คำผิด</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        LOGO
+    </div>
+
+</header>
+
+
+
+<div class="center-box">
+
+    <p class="drag-text">
+        ลากไฟล์และวางที่นี่
+    </p>
+
+
+    <input
+        type="file"
+        id="fileInput"
+        accept=".csv,.xlsx,.xls"
+        hidden
+    >
+
+
+    <button
+        class="upload-btn"
+        onclick="selectFile()"
+    >
+        อัปโหลด
+    </button>
+
+
+    <p id="fileName"
+       class="file-name">
+
+        ยังไม่ได้เลือกไฟล์
+
+    </p>
+
+
+
+    <div class="check-area">
+
+        <label>
+
+            <input
+                type="checkbox"
+                id="trainCheck"
+            >
+
+            อัปโหลดเทรน
+
+        </label>
+
+
+        <label>
+
+            <input
+                type="checkbox"
+                id="testCheck"
+            >
+
+            อัปโหลดเพื่อตรวจ
+
+        </label>
+
+    </div>
+
+</div>
+
+
+
+<button
+    class="main-btn"
+    onclick="goToFile()"
+>
+
+    ดำเนินการตรวจสอบ
+
+</button>
+
+
+
+<script>
+
+
+// =====================================
+// URL ของ Backend
+// =====================================
+
+const API_URL =
+    "http://127.0.0.1:8000";
+
+
+let selectedFile = null;
+
+
+
+// =====================================
+// เปิดหน้าต่างเลือกไฟล์
+// =====================================
+
+function selectFile() {
+
+    document
+        .getElementById("fileInput")
+        .click();
+
+}
+
+
+
+// =====================================
+// เมื่อเลือกไฟล์
+// =====================================
+
+document
+    .getElementById("fileInput")
+    .addEventListener(
+        "change",
+        function () {
+
+            selectedFile =
+                this.files[0];
+
+
+            if (selectedFile) {
+
+                document
+                    .getElementById(
+                        "fileName"
+                    )
+                    .innerText =
+                    "ไฟล์ที่เลือก : " +
+                    selectedFile.name;
+
+            }
+
+        }
+    );
+
+
+
+// =====================================
+// ส่งไฟล์ไป Backend
+// =====================================
+
+async function uploadFile() {
+
+    if (!selectedFile) {
+
+        alert(
+            "กรุณาเลือกไฟล์ก่อน"
+        );
+
+        return false;
+
+    }
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "file",
+        selectedFile
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/files/upload",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.detail ||
+                "อัปโหลดไฟล์ไม่สำเร็จ"
+            );
+
+            return false;
+
+        }
+
+
+        console.log(
+            "Upload สำเร็จ",
+            data
+        );
+
+
+        // เก็บชื่อไฟล์
+        localStorage.setItem(
+            "fileName",
+            data.filename
+        );
+
+
+        return true;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "ไม่สามารถเชื่อมต่อ Backend ได้"
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+
+// =====================================
+// ดำเนินการ
+// =====================================
+
+async function goToFile() {
+
+    const train =
+        document
+            .getElementById(
+                "trainCheck"
+            )
+            .checked;
+
+
+    const test =
+        document
+            .getElementById(
+                "testCheck"
+            )
+            .checked;
+
+
+
+    // ยังไม่ได้เลือกไฟล์
+
+    if (!selectedFile) {
+
+        alert(
+            "กรุณาเลือกไฟล์ก่อน"
+        );
+
+        return;
+
+    }
+
+
+
+    // ยังไม่ได้เลือกประเภท
+
+    if (!train && !test) {
+
+        alert(
+            "กรุณาเลือก อัปโหลดเทรน หรือ อัปโหลดเพื่อตรวจ"
+        );
+
+        return;
+
+    }
+
+
+
+    // Upload ไป Backend
+
+    const uploaded =
+        await uploadFile();
+
+
+    if (!uploaded) {
+
+        return;
+
+    }
+
+
+
+    // เก็บค่าการเลือก
+
+    localStorage.setItem(
+        "trainSelected",
+        train
+    );
+
+
+    localStorage.setItem(
+        "testSelected",
+        test
+    );
+
+
+
+    // ไปหน้า Train / Test
+
+    window.location.href =
+        "train_test.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
